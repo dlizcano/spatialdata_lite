@@ -1,0 +1,75 @@
+---
+project:
+  type: website
+
+website:
+  title: "Introducción al procesamiento, visualización y análisis de datos espaciales en R"
+  subtitle: "Un mini curso"
+  author: "Diego J. Lizcano & Andres Felipe Suárez-Castro"
+  page-navigation: true
+  navbar:
+    right:
+      - icon: github
+        href: https://github.com/dlizcano/spatialdata_lite
+        aria-label: GitHub
+        
+execute: 
+  echo: true
+  eval: true
+  warning: false
+  error: false
+  output: asis
+  
+  
+format: 
+  html: 
+    code-fold: true
+    code-summary: "codigo R"
+    highlight-style: breezedark
+    fig-width: 8
+    fig-height: 6
+---
+
+## Estructura del curso
+
+Este es un curso de un día para el V Congreso Colombiano de mastozoología.  
+[![VCCMas](img/LogoVCCM.png)](https://academicovccmyopal.wixsite.com/my-site)
+
+### Día 1 en la mañana
+Introducción al análisis de datos en R. Tipos de objetos en R. Visualización para comprobar errores y patrones en los datos (ggplot) Preparación de tablas para la generación de análisis espaciales (dplyr – tidyr)
+
+### Día 1 en la tarde
+Importación y visualización de datos espaciales (ps, sf, raster, rgdal). Generación de mapas (raster, ggmap, leaflet)
+
+### Datos
+Los datos requridos para completar el curso pueden ser descargados de internet
+
+### Requisitos
+Computador con acceso a internet. Contar con R y RStudio previamente instalados. La instalación del programa no se explicará durante el curso.
+
+Antes del curso instalar los paquetes: 
+
+```{r}
+#| eval: false
+#| 
+install.packages("tidyverse")
+install.packages("rgbif")
+install.packages("sf")
+install.packages("terra")
+install.packages("mapview")
+install.packages("maps")
+install.packages("elevatr")
+
+
+```
+
+
+La experiencia requerida en R es mínima, sin embargo, se espera que los participantes estén familiarizados con el siguiente tipo de objetos básicos R: vectores, listas y dataframes. 
+Puedes ver aprender o repasar el manejo básico de R en [éste tutorial](https://dlizcano.github.io/IntroR)
+
+Tambien se requiere, un conocimiento básico sobre conceptos relacionados con sistemas de coordenadas y proyecciones geográficas, aunque no es esencial.
+
+
+
+
+

@@ -1,0 +1,30 @@
+---
+title: "About"
+description: |
+  Instructores y creditos de este curso.
+author: 
+  - name: Diego J. Lizcano
+    orcid: https://orcid.org/0000-0002-9648-0576
+  - name: Andres Felipe Suárez-Castro
+    orcid: https://orcid.org/0000-0002-6621-3821
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Instructores
+
+[Diego J. Lizcano, Ph.D.](http://dlizcano.github.io/) Sociedad Colombiana de Mastozoología (SCMas)
+
+[Andres Felipe Suárez-Castro, Ph.D.](https://experts.griffith.edu.au/32770-andres-felipe-suarez-castro) Griffith University: Brisbane, Australia.
+
+
+## Créditos
+
+Este mini curso es una version ligera del fantastico curso [Introducción al procesamiento, visualización y mapeo de datos espaciales en R](https://afsuarezca.github.io/Intro_R_espacial/index.html) preparado por el Dr. Felipe Suárez-Castro.
+
+Algunos ejercicios presentados en este curso fueron adaptados del curso desarrollado por C.J. Brown, D. Schoeman, A.J. Richardson y B. Venables, el cual se encuentra disponible en:
+
+https://www.seascapemodels.org/code.html
+

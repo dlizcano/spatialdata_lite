@@ -1,0 +1,365 @@
+---
+title: "AM"
+author: 
+  - name: Diego J. Lizcano
+    orcid: https://orcid.org/0000-0002-9648-0576
+  - name: Andres Felipe Suárez-Castro
+    orcid: https://orcid.org/0000-0002-6621-3821
+date: "`r Sys.Date()`"
+html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    theme: united
+    highlight: tango
+    code-tools: true
+    code-fold: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Mañana del Día 1
+
+## Datos y organización general
+
+En primer lugar, es importante recordar que la organización es clave cuando se está generando un nuevo código. En este sentido, le recomendamos que cree una carpeta cerca de c: para cada nuevo proyecto. Puede hacer esto como un proyecto de Rstudio, para esto (dirijase a: Archivo\> Nuevo proyecto) o simplemente como una nueva carpeta. Dentro de esta carpeta, cree una carpeta de datos donde guardará sus datos sin procesar. Puede almacenar algunos objetos intermedios en otra subcarpeta. También cree una carpeta para su código R y una carpeta para guardar sus figuras.
+
+la organización de carpetas que se sugere es:
+
+C://curso\
+- data\
+- R\
+- fig
+
+## Caso de estudio
+
+Durante el curso utilizaremos datos que vamos a descargar de la plataforma GBIF con el paquete rgbif. El ejercicio lo haremos con una especie de Mamífero amenazado, la danta de montaña (*Tapirus pinchaque*).
+
+![Danta de montaña](https://colombia.wcs.org/Portals/113/Noticias/En%20Terreno_temas%20varios/Diego%20Lizcano_danta_junio%202020/IMG_4332-2.jpg?ver=2020-06-26-160835-250)
+
+```{r, include=FALSE}
+library(tidyverse)
+library(rgbif)
+```
+
+> Tenga en cuenta que se requiere conexión a internet y que podemos estar descargando muchos datos desde GBIF, así que este paso puede tardar unos segundos...
+
+```{r, include=TRUE, eval=TRUE}
+#| code-fold: true
+
+#######################################
+## DOWNLOAD AND CLEAN DATA FROM GBIF ##
+#######################################
+library(rgbif)
+# IF YOU HAVE ONLY ONE SPECIES ----
+species1 <- c("Tapirus pinchaque")
+# download GBIF occurrence data for this species; this takes time if there are many data points!
+gbif_data_sp1 <- occ_data(scientificName = species1, hasCoordinate = TRUE, limit = 20000)
+# create a table with the downloaded data:
+dat_sp1 <- gbif_data_sp1$data
+# if "Records found" is larger than "Records returned", you need to increase the 'limit' argument above -- see help(occ_data) for options and limitations
+# if your species is widespread but you want to work on a particular region, you can download records within a specified window of coordinates:
+
+
+# colombia_data <- occ_data(scientificName = species1, hasCoordinate = TRUE, limit = 20000, decimalLatitude = "0.996444, 5")#decimalLongitude = "-10, 10", decimalLatitude = "35, 55")  # note that coordinate ranges must be specified this way: "smaller, larger" (e.g. "-5, -2")
+# gbif_data
+
+
+
+
+```
+
+Revise el entorno global *Global Environment*, en donde ahora deben aparecer tres objetos en la memoria. Uno llamado myspecies que corresponde a la especie. Otro llamado "gbif_data" con los datos descargados del GBIF y el objeto "dat" que es una tabla que contiene los registros de la especie de interes.
+
+## Revisión inicial de los datos
+
+Una vez que la tabla esté cargada en el entorno global, es necesario hacer algunas verificaciones iniciales de los datos. Hay algunas funciones clave en R que nos permiten ver los datos de diferentes maneras. Es deseable que estas funciones se conviertan en una rutina estándar en sus scripts, pues le ayudarán a determinar si sus datos están formateados correctamente.
+
+Primero, verificaremos el tipo de datos de cada una de las variables en nuestra tabla de datos. Tome un tiempo para entender cada una de estas variables.
+
+```{r eval=FALSE}
+#| code-fold: true
+#| 
+# ejecute una sola linea a la vez
+head(dat_sp1)
+tail(dat_sp1)
+# ver los datos de la tabla
+View(dat_sp1)
+names(dat_sp1)
+nrow(dat_sp1)
+ncol(dat_sp1)
+length(unique(dat_sp1$stateProvince))
+unique(dat_sp1$stateProvince)
+length(unique(dat_sp1$year))
+unique(dat_sp1$year)
+table(dat_sp1$publishingCountry)
+summary(dat)
+```
+
+## Ordenamiento de datos
+
+Ordenar los datos significa manipularlos con el fin de facilitar su exploración y análisis. El paquete `"dplyr"`, incluido en `tidyverse`, proporciona una serie de funciones útiles en este sentido. El marco conceptual que sustenta `dplyr` se llama "Gramática de la manipulación de datos". A continuación revisaremos diferentes funciones para filtrar, resumir y combinar diferentes tablas.
+
+```{r}
+#| code-fold: true
+# cargar el paquete dplyr
+library(dplyr)
+```
+
+## Filtro de datos
+
+Empecemos por explorar los datos para una region. Para ello, podemos utilizar la función `filter`, filtrando los datos de Risaralda, Quindío, Caldas y Tolima.
+
+```{r, eval=FALSE}
+#| code-fold: true
+#| warning: false
+dat_nevados <- dplyr::filter(dat_sp1, stateProvince == c("Risaralda", "Quindío", "Caldas", "Tolima")) 
+
+head(dat_nevados)
+```
+
+También es posible que deseemos seleccionar algunas columnas de nuestro conjunto de datos. Podemos hacer esto fácilmente con las herramientas de indexación de dataframes de R. En nuestro caso selecionaremos las columnas que son de nuestro interes.
+
+```{r, eval=FALSE}
+#| code-fold: true
+# get the columns that matter for mapping and cleaning the occurrence data:
+sp1_coords <- gbif_data_sp1$data[ , c("scientificName", "decimalLongitude", "decimalLatitude", "individualCount", "occurrenceStatus", "coordinateUncertaintyInMeters", "institutionCode", "references")]
+
+head(sp1_coords) 
+```
+
+## Combinación de tablas
+
+Nuestra tabla de registros tiene información específica sobre las localidades de una sola especie. Con el fin de entender como combinar tablas descargaremos los datos de otra especie. En este caso el Oso Andino (*Tremarctos ornatus*).
+
+![Oso andino](https://www.animalspot.net/wp-content/uploads/2015/12/Baby-Spectacled-Bear.jpg)
+  
+> Tenga en cuenta que se requiere conexión a internet y que podemos estar descargando muchos datos desde GBIF, así que este paso puede tardar unos segundos...
+  
+```{r eval=TRUE, echo=TRUE, include=FALSE}
+#| code-fold: true
+#| 
+species2 <- c("Tremarctos ornatus")
+# download GBIF occurrence data for this species; this takes time if there are many data points!
+gbif_data_sp2 <- occ_data(scientificName = species2, hasCoordinate = TRUE, limit = 20000)
+# save to table
+dat_sp2 <- gbif_data_sp2$data
+```
+
+
+El paquete `dplyr` proporciona un conjunto útil de funciones para unir tablas que tienen columnas en común. Escriba `?full_join` en su consola y obtendrá una lista de todos los tipos de unión que admite `dplyr`.
+
+Hoy usaremos `full_join` para unir los registros de dos especies en una sola tabla. La funcion `full_join` permite mantener las filas que no coinciden también). Otras funcionalidades de join se ven en la version ampliada de este curso.
+
+```{r, message=FALSE}
+#| code-fold: true
+#| 
+dat_oso_danta  <- full_join(x = dat_sp2, y = dat_sp1)
+
+```
+
+## Visualización de datos
+
+A menudo, es más fácil explorar datos mediante el uso de gráficos. R tiene buenos paquetes base para realizar gráficos. Hoy usaremos el paquete `ggplot2`.
+
+```{r}
+#| code-fold: true
+library(ggplot2)
+```
+
+Primero, podemos generar un histograma para revisar la distribución de los registos por año. Por ahora no nos preocuparemos demasiado por la estética de la gráfica.
+
+```{r, warning=FALSE}
+#| code-fold: true
+ggplot(dat_oso_danta) + 
+  aes(x = year) + 
+  geom_histogram()
+```
+
+El componente `ggplot(dat_input)` determina la tabla de datos de la cual obtendremos las variables. Esta función también crea la página para el gráfico. El componente `aes()` hace referencia a la estética del gráfico, y aquí lo usamos para declarar que el eje x que corresponde a el año. Luego `geom_histogram()` declara el tipo de gráfico que se utilizará. En este caso se refiere al histograma.
+
+Inténtelo de nuevo, pero esta vez añada un color para cada especie.
+
+```{r, warning=FALSE}
+#| code-fold: true
+ggplot(dat_oso_danta) + 
+  aes(x = year, fill = scientificName) +
+  geom_histogram()
+```
+
+Vamos a graficar de nuevo los puntos de acuerdo a la especie. Para ello, incluya el argumento "color = scientificName" dentro de `aes()`. Observe que podemos ver que hay unos puntos que se comportan como *outliers* y debemos eliminarlos.
+
+```{r}
+#| code-fold: true
+ggplot(dat_oso_danta) + 
+  aes(x = decimalLongitude, y = decimalLatitude, color = scientificName) +
+  geom_point()
+```
+
+Vamos a filtrar las dos especies de interes
+
+```{r}
+#| code-fold: true
+dat_oso_danta_filtrado <- dat_oso_danta %>% 
+  filter(scientificName == c("Tremarctos ornatus (F.G.Cuvier, 1825)", "Tapirus pinchaque (Roulin, 1829)")) %>%
+  filter(decimalLatitude <= 20 & decimalLatitude >= -20)
+```
+
+Veamos como queda
+
+```{r}
+#| code-fold: true
+ggplot(dat_oso_danta_filtrado) + 
+  aes(x = decimalLongitude, y = decimalLatitude, color = scientificName) +
+  geom_point()
+```
+
+## Agrupación y resumen de datos
+
+Presentar los datos en forma de gráficos es importante, pero ver los números concretos también puede ser útil. Supongamos que queremos identificar la elevación promedio y la desviación estandar a la que han sido recolectados los registros, así como el número de registros por departamento.
+
+Para hacer esto, vamos a agrupar los datos con la función `group_by` seguida de summarize para obtener las estadísticas en cada departamento.
+
+```{r}
+#| code-fold: true
+datg <- group_by(dat_oso_danta_filtrado, stateProvince)
+```
+
+`group_by()` toma una tabla existente y la convierte en una tabla agrupada donde las operaciones se realizan "por grupo". Revise el objeto datg y verá que los datos en sí mismos no han cambiado. Sin embargo, los datos están agrupados en 31 departamentos.
+
+Ahora podemos utilizar esa tabla para resumir los datos con algunas estadísticas deseadas
+
+```{r}
+#| code-fold: true
+dat_elev_sum <- 
+    summarize(datg,
+              mean_elev = mean(elevation, na.rm=T),
+              sd_elev = sd(elevation, na.rm=T),
+              n = n())
+dat_elev_sum
+
+```
+
+Para ejecutar varios pasos como los anteriores, podemos usar la función `%>%`, la cual permite utilizar el resultado de una función como el primer argumento del siguiente. Por ejemplo, estas líneas de código hacen lo mismo:
+
+```{r, results='hide'}
+#| code-fold: true
+group_by(dat_oso_danta_filtrado, stateProvince)
+#es lo mismo que
+dat_oso_danta_filtrado %>% group_by(., stateProvince)
+```
+
+Las función `%>%` es útil para encadenar operaciones de varios pasos en tablas. Para la mayoría de las funciones compatibles con `%>%`, el. ni siquiera es necesario, lo que hace que nuestro código sea aún más fácil de leer.
+
+Aquí calculamos la desviación estándar y media de la elevación para cada departamento, así como el número de filas (registros) n () para cada departamento:
+
+```{r, warning=FALSE}
+#| code-fold: true
+dat_elev_sum <- 
+  dat_oso_danta_filtrado %>% 
+  group_by(scientificName) %>%
+  summarize(mean_elev  = mean(elevation, na.rm=T),
+            sd_elev = sd(elevation, na.rm=T),
+            n = n())
+```
+
+Ahora vamos a graficar la media y la desviación estándar de la elevación por especie
+
+```{r}
+#| code-fold: true
+dat_oso_danta_filtrado %>% 
+  group_by(scientificName) %>%
+  summarize(mean_elev  = mean(elevation, na.rm=T),
+            sd_elev = sd(elevation, na.rm=T),
+            n = n()) %>%
+  ungroup() %>%
+  ggplot(aes(x = scientificName, y = mean_elev)) +
+  geom_linerange(aes(ymin = mean_elev - sd_elev, ymax = mean_elev + sd_elev)) +
+  geom_point()
+```
+
+## Creación de plots para publicaciones
+
+Supongamos que ahora queremos visualizar la distribución de registros a través del tiempo. Además, queremos ver la incidencia de diferentes técnicas de muestreo en el registro de especies. En primer lugar, necesitamos contar los registros por año.
+
+### Ejercicio
+
+Utilice las funciones `group_by`, `summarize` y `filter` para contar los registros de cada especie por año desde 1950 por cada técnica de muestreo (basisOfRecord)
+
+```{r, warning=FALSE, echo=T, message=FALSE}
+#| code-fold: true
+dat_per_year<-dat_oso_danta_filtrado %>% 
+                group_by(year,basisOfRecord) %>%
+                summarize(n = n()) %>%
+                filter(year > 1949)
+```
+
+Ahora podemos graficar los datos agrupando por técnica de muestro
+
+```{r, results='show', warning=FALSE}
+#| code-fold: true
+p1<-ggplot(dat_per_year, aes(x=year, y=n,color = basisOfRecord)) +
+    geom_line(size = 1) 
+p1
+```
+
+Añadir una línea en que muestre el año con más registros
+
+```{r}
+#| code-fold: true
+p2<-p1 +
+  geom_vline(xintercept = 2016,colour="black", linetype = "longdash") 
+p2
+```
+
+La función `anotate()` nos permite añadir texto en ubicaciones específicas de nuestro gráfico
+
+```{r, results="show"}
+#| code-fold: true 
+p3<-p2 +
+  annotate("text", label = "2016", x = 2017, y = 1300, size = 4, colour = "black")
+p3
+```
+
+Finalmente, podemos cambiar el tamaño del texto de los ejes
+
+```{r, results='show'}
+#| code-fold: true  
+e1<-p3 +
+  theme_bw()+
+  theme(legend.position = "right",
+        legend.title = element_blank(),
+        legend.text = element_text(size = 14),
+        text = element_text(size = 14),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12))+
+    ylab("# registros")+ xlab("año")+
+  ggtitle("Número de registros de danta y oso")
+e1
+```
+
+
+## Citacion adecuada de los datos
+
+Tenga en cuenta que es una buena practica citar correctamente los datos que se descargan de GBIF. 
+
+```{r ,eval=FALSE}
+#| code-fold: true
+# get the DOIs for citing these data properly:
+
+gbif_citation(gbif_data_sp1) # para la danta
+
+gbif_citation(gbif_data_sp2) # para la el oso
+
+# note: if you need or prefer only one DOI for the entire dataset, download the dataset directly from www.gbif.org and then import the .csv to R. It is very important to properly cite the data sources! GBIF is not a source, just a repository for many people who put in very hard work to collect these data and make them available.
+```
+
+
+¡Hemos llegado al final de la mañana! Los conceptos aprendidos el día de hoy serán fundamentales para sacar el mayor provecho en la tarde. Es hora de Almorzar :)
+
+```{=html}
+
+<iframe src="https://giphy.com/embed/boj7PRvJOpIT6" width="480" height="383" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+```
