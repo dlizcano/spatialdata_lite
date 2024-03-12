@@ -24,7 +24,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Datos y organización general
 
-En primer lugar, es importante recordar que la organización es clave cuando se está generando un nuevo código. En este sentido, le recomendamos que cree una carpeta cerca de c: para cada nuevo proyecto. Puede hacer esto como un proyecto de Rstudio, para esto (dirijase a: Archivo\> Nuevo proyecto) o simplemente como una nueva carpeta. Dentro de esta carpeta, cree una carpeta de datos donde guardará sus datos sin procesar. Puede almacenar algunos objetos intermedios en otra subcarpeta. También cree una carpeta para su código R y una carpeta para guardar sus figuras.
+En primer lugar, es importante recordar que la organización es clave cuando se está generando un nuevo código. En este sentido, le recomendamos que cree una carpeta en su disco duro (C:) para cada nuevo proyecto. Puede hacer esto como un proyecto de Rstudio; para esto diríjase a: Archivo\> Nuevo proyecto o simplemente cree una nueva carpeta en su explorador y establezca su directorio de trabajo allí. Dentro de esta carpeta, cree una carpeta de datos donde guardará sus datos sin procesar. Puede almacenar algunos objetos intermedios en otra subcarpeta. También cree una carpeta para su código R y una carpeta para guardar sus figuras.
 
 la organización de carpetas que se sugere es:
 
@@ -35,7 +35,7 @@ C://curso\
 
 ## Caso de estudio
 
-Durante el curso utilizaremos datos que vamos a descargar de la plataforma GBIF con el paquete rgbif. El ejercicio lo haremos con una especie de Mamífero amenazado, la danta de montaña (*Tapirus pinchaque*).
+Durante el curso utilizaremos datos que vamos a descargar de la plataforma GBIF con el paquete rgbif. El ejercicio lo haremos con una especie de mamífero amenazado, la danta de montaña (*Tapirus pinchaque*).
 
 ![Danta de montaña](https://colombia.wcs.org/Portals/113/Noticias/En%20Terreno_temas%20varios/Diego%20Lizcano_danta_junio%202020/IMG_4332-2.jpg?ver=2020-06-26-160835-250)
 
@@ -53,17 +53,17 @@ library(rgbif)
 ## DOWNLOAD AND CLEAN DATA FROM GBIF ##
 #######################################
 library(rgbif)
-# IF YOU HAVE ONLY ONE SPECIES ----
+# Si únicamente descargará los datos de una especie ----
 species1 <- c("Tapirus pinchaque")
-# download GBIF occurrence data for this species; this takes time if there are many data points!
+# Descargar datos de ocurrencia de GBIF para esta especie; Este proceso puede tomar tiempo si existen muchos puntos!
 gbif_data_sp1 <- occ_data(scientificName = species1, hasCoordinate = TRUE, limit = 20000)
-# create a table with the downloaded data:
+# crear una tabla con los datos descargados:
 dat_sp1 <- gbif_data_sp1$data
-# if "Records found" is larger than "Records returned", you need to increase the 'limit' argument above -- see help(occ_data) for options and limitations
-# if your species is widespread but you want to work on a particular region, you can download records within a specified window of coordinates:
+# Si "Records found" es más grande que "Records returned", debe incrementar el argumento 'limit' arriba -- consulte help(occ_data) para ver opciones y limitaciones
+# Si la especie tiene una distribución amplia, pero usted desea trabajar en una región particular, puede descargar los datos para unas coordinadas particulares:
 
 
-# colombia_data <- occ_data(scientificName = species1, hasCoordinate = TRUE, limit = 20000, decimalLatitude = "0.996444, 5")#decimalLongitude = "-10, 10", decimalLatitude = "35, 55")  # note that coordinate ranges must be specified this way: "smaller, larger" (e.g. "-5, -2")
+# colombia_data <- occ_data(scientificName = species1, hasCoordinate = TRUE, limit = 20000, decimalLatitude = "0.996444, 5")#decimalLongitude = "-10, 10", decimalLatitude = "35, 55")  # note que los intervalos de coordenadas deben estar especificadas en el siguiente formato: "smaller, larger" (e.g. "-5, -2")
 # gbif_data
 
 
@@ -71,7 +71,7 @@ dat_sp1 <- gbif_data_sp1$data
 
 ```
 
-Revise el entorno global *Global Environment*, en donde ahora deben aparecer tres objetos en la memoria. Uno llamado myspecies que corresponde a la especie. Otro llamado "gbif_data" con los datos descargados del GBIF y el objeto "dat" que es una tabla que contiene los registros de la especie de interes.
+Revise el entorno global *Global Environment*, en donde ahora deben aparecer tres objetos en la memoria. Uno llamado myspecies que corresponde a la especie. Otro llamado "gbif_data" con los datos descargados del GBIF y el objeto "dat" que es una tabla que contiene los registros de la especie de interés.
 
 ## Revisión inicial de los datos
 
@@ -83,19 +83,19 @@ Primero, verificaremos el tipo de datos de cada una de las variables en nuestra 
 #| code-fold: true
 #| 
 # ejecute una sola linea a la vez
-head(dat_sp1)
-tail(dat_sp1)
+head(dat_sp1) # ver los primeros seis registros de la tabla
+tail(dat_sp1) # ver los últimos seis registros de la tabla
 # ver los datos de la tabla
-View(dat_sp1)
-names(dat_sp1)
-nrow(dat_sp1)
-ncol(dat_sp1)
-length(unique(dat_sp1$stateProvince))
-unique(dat_sp1$stateProvince)
-length(unique(dat_sp1$year))
-unique(dat_sp1$year)
-table(dat_sp1$publishingCountry)
-summary(dat)
+View(dat_sp1)#ver toda la tabla
+names(dat_sp1)# nombres de la columnas
+nrow(dat_sp1)# número de filas de la tabla
+ncol(dat_sp1)#número de columnas de la tabla
+length(unique(dat_sp1$stateProvince))#número de categorías únicas de la columna "stateProvince"
+unique(dat_sp1$stateProvince) #categorías únicas de la columna "stateProvince"
+length(unique(dat_sp1$year))#número de categorías únicas de la columna "stateProvince"
+unique(dat_sp1$year)#años únicos de los registros
+table(dat_sp1$publishingCountry)#número de registros por país
+summary(dat_sp1)# resumen de la información disponible en la tabla
 ```
 
 ## Ordenamiento de datos
@@ -110,7 +110,7 @@ library(dplyr)
 
 ## Filtro de datos
 
-Empecemos por explorar los datos para una region. Para ello, podemos utilizar la función `filter`, filtrando los datos de Risaralda, Quindío, Caldas y Tolima.
+Empecemos por explorar los datos para una región. Para ello, podemos utilizar la función `filter`, filtrando los datos de Risaralda, Quindío, Caldas y Tolima.
 
 ```{r, eval=FALSE}
 #| code-fold: true
@@ -151,7 +151,7 @@ dat_sp2 <- gbif_data_sp2$data
 
 El paquete `dplyr` proporciona un conjunto útil de funciones para unir tablas que tienen columnas en común. Escriba `?full_join` en su consola y obtendrá una lista de todos los tipos de unión que admite `dplyr`.
 
-Hoy usaremos `full_join` para unir los registros de dos especies en una sola tabla. La funcion `full_join` permite mantener las filas que no coinciden también). Otras funcionalidades de join se ven en la version ampliada de este curso.
+Hoy usaremos `full_join` para unir los registros de dos especies en una sola tabla. La función `full_join` permite mantener las filas que no coinciden también). Otras funcionalidades de join se ven en la version ampliada de este curso.
 
 ```{r, message=FALSE}
 #| code-fold: true
@@ -203,9 +203,10 @@ Vamos a filtrar las dos especies de interes
 ```{r}
 #| code-fold: true
 dat_oso_danta_filtrado <- dat_oso_danta %>% 
-  filter(scientificName == c("Tremarctos ornatus (F.G.Cuvier, 1825)", "Tapirus pinchaque (Roulin, 1829)")) %>%
+  filter(scientificName %in% c("Tremarctos ornatus (F.G.Cuvier, 1825)", "Tapirus pinchaque (Roulin, 1829)")) %>%
   filter(decimalLatitude <= 20 & decimalLatitude >= -20)
 ```
+En este caso, el operador %in% verifica cuáles elementos de la columna scientificName corresponden a las dos especies evaluadas. 
 
 Veamos como queda
 
@@ -218,7 +219,7 @@ ggplot(dat_oso_danta_filtrado) +
 
 ## Agrupación y resumen de datos
 
-Presentar los datos en forma de gráficos es importante, pero ver los números concretos también puede ser útil. Supongamos que queremos identificar la elevación promedio y la desviación estandar a la que han sido recolectados los registros, así como el número de registros por departamento.
+Presentar los datos en forma de gráficos es importante, pero ver los números concretos también puede ser útil. Supongamos que queremos identificar la elevación promedio y la desviación estándar a la que han sido recolectados los registros, así como el número de registros por departamento.
 
 Para hacer esto, vamos a agrupar los datos con la función `group_by` seguida de summarize para obtener las estadísticas en cada departamento.
 
@@ -265,7 +266,7 @@ dat_elev_sum <-
             n = n())
 ```
 
-Ahora vamos a graficar la media y la desviación estándar de la elevación por especie
+Ahora vamos a graficar la media y la desviación estándar de la elevación por especie:
 
 ```{r}
 #| code-fold: true
@@ -301,7 +302,7 @@ Ahora podemos graficar los datos agrupando por técnica de muestro
 ```{r, results='show', warning=FALSE}
 #| code-fold: true
 p1<-ggplot(dat_per_year, aes(x=year, y=n,color = basisOfRecord)) +
-    geom_line(size = 1) 
+    geom_line(linewidth = 1) 
 p1
 ```
 
@@ -353,7 +354,7 @@ gbif_citation(gbif_data_sp1) # para la danta
 
 gbif_citation(gbif_data_sp2) # para la el oso
 
-# note: if you need or prefer only one DOI for the entire dataset, download the dataset directly from www.gbif.org and then import the .csv to R. It is very important to properly cite the data sources! GBIF is not a source, just a repository for many people who put in very hard work to collect these data and make them available.
+# nota: si necesita o prefiere solo un DOI para todo el conjunto de datos, descargue el conjunto de datos directamente desde www.gbif.org y luego importe el .csv a R. ¡Es muy importante citar correctamente las fuentes de datos! GBIF no es una fuente, sólo un depósito para muchas personas que trabajaron muy duro para recopilar estos datos y ponerlos a disposición.
 ```
 
 
