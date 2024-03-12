@@ -30,7 +30,8 @@ library(mapview)
 library(ggplot2)
 library(sf)
 ```
-El paquete sf se utiliza para trabajar con datos espaciales y ofrece funciones para leer, escribir y analizar datos espaciales (features en inglés) de una manera sencilla y eficiente. 
+
+El paquete sf se utiliza para trabajar con datos espaciales y ofrece funciones para leer, escribir y analizar datos espaciales (features en inglés) de una manera sencilla y eficiente.
 
 También utilizaremos el paquete maps para cargar un mapa global. Existen otros paquetes que también funcionan para este propósito, como el paquete *rnaturalearth*, el cual proporciona un mapa de países de todo el mundo.
 
@@ -50,13 +51,12 @@ Ahora podemos cargar el mapa global usando la función *map()*. Además, transfo
 world1 <- sf::st_as_sf(map(database = 'world', plot = FALSE, fill = TRUE))
 world1
 ```
+
 **Ejercicio**
 
 Identifique las principales características del objeto world1:
 
-¿Cuántos atributos y polígonos tiene? 
-¿Cuál es el sistema de coordenadas?
-¿Cuál es su extensión?
+¿Cuántos atributos y polígonos tiene? ¿Cuál es el sistema de coordenadas? ¿Cuál es su extensión?
 
 *Ejecicio extra* ¿Cómo reescribiría la función anterior utilizando `%>%` ?
 
@@ -70,7 +70,6 @@ plot(world1)
 
 ```
 
-
 Ahora podemos generar un plot utilizando el paquete ggplot y los conceptos aprendidos durante el día anterior.
 
 En este caso, debemos utilizar `geom_sf()` con el fin de llamar nuestro objeto `sf`
@@ -83,7 +82,7 @@ ggplot() +
   geom_sf(data = world1) 
 ```
 
-El siguiente paso consiste en anadir puntos de distribución de especies sobre nuestro mapa. Para ello, vamos a utilizar los puntos de localidades descargados desde GBIF en la mañana.  
+El siguiente paso consiste en anadir puntos de distribución de especies sobre nuestro mapa. Para ello, vamos a utilizar los puntos de localidades descargados desde GBIF en la mañana.
 
 ```{r }
 #| code-fold: true
@@ -92,7 +91,6 @@ El siguiente paso consiste en anadir puntos de distribución de especies sobre n
 library(tidyverse)
 ```
 
-
 Para añadir los puntos en nuestro mapa, utilizaremos la función `geom_point()`
 
 ```{r}
@@ -100,9 +98,8 @@ Para añadir los puntos en nuestro mapa, utilizaremos la función `geom_point()`
 #| eval: true
 #| warning: false
 #| 
-dat_oso_danta_filtrado <- readRDS("C:/CodigoR/intro_R_espacial_lite/data/dat_oso_danta_filtrado")
+dat_oso_danta_filtrado <- readRDS("C:/Users/silvi/Documents/GitHub/spatialdata_lite/data/dat_oso_danta_filtrado")
 ```
-
 
 ```{r}
 #| code-fold: true
@@ -129,7 +126,7 @@ range(dat_oso_danta_filtrado$decimalLatitude)
 
 Estos son los valores que utilizaremos de guía para definir la extensión de nuestro mapa mediante el uso de `coord_sf()`. Note que vamos a añadir los argumentos *xlim* y *ylim* que definen el limite de nuestro mapa
 
-El nuevo mapa con la extensión corregida luce de la siguiente manera: 
+El nuevo mapa con la extensión corregida luce de la siguiente manera:
 
 ```{r}
 #| code-fold: true
@@ -162,11 +159,11 @@ ggplot() +
   theme_bw()
 ```
 
-Hasta acá hemos aprendido un vistazo general sobre las caracteristicas vectoriales (puntos, lineas, poligonos) de los mapas. Sin embargo, gran parte de los mapas tienen otro tipo de informacion que no es vectorial. 
+Hasta acá hemos aprendido un vistazo general sobre las caracteristicas vectoriales (puntos, lineas, poligonos) de los mapas. Sin embargo, gran parte de los mapas tienen otro tipo de informacion que no es vectorial.
 
 ## Objetos Raster
 
-Un ráster es una estructura de datos espaciales (geográficos) que divide una región en rectángulos llamados "celdas" (o "píxeles") que pueden almacenar uno o más valores para cada una de estas celdas. Esta estructura de datos también se conoce como "cuadrícula" (o grid) y a contrasta con los datos "vectoriales" que se utilizan para representar puntos, líneas y polígonos. 
+Un ráster es una estructura de datos espaciales (geográficos) que divide una región en rectángulos llamados "celdas" (o "píxeles") que pueden almacenar uno o más valores para cada una de estas celdas. Esta estructura de datos también se conoce como "cuadrícula" (o grid) y a contrasta con los datos "vectoriales" que se utilizan para representar puntos, líneas y polígonos.
 
 Los objetos ráster, se pueden leer y manipular con el paquete terra. Carguemos ese paquete ahora:
 
@@ -177,9 +174,9 @@ Los objetos ráster, se pueden leer y manipular con el paquete terra. Carguemos 
 library(terra)
 ```
 
-La función `terra()` nos sirve para cargar y manipular objetos raster dentro de R. 
+La función `terra()` nos sirve para cargar y manipular objetos raster dentro de R.
 
-Para este ejercicio vamos a descargar un modelo digital de elevación de terreno (DEM) usando el paquete `elevatr`, el cual descarga la topografia desde Amazon Web Services (AWS). Como fuente podemos usar cualquier mapa sf, en nuestro caso usaremos el mapa de puntos de la danta y el oso el cual convertiremos a sf. 
+Para este ejercicio vamos a descargar un modelo digital de elevación de terreno (DEM) usando el paquete `elevatr`, el cual descarga la topografia desde Amazon Web Services (AWS). Como fuente podemos usar cualquier mapa sf, en nuestro caso usaremos el mapa de puntos de la danta y el oso el cual convertiremos a sf.
 
 En este caso, cargaremos una capa de elevación para el territorio colombiano.
 
@@ -200,8 +197,7 @@ terra::plot(elevation)
 
 ```
 
-
-Tome un tiempo para inspeccionar las principales características del raster, incluyendo su resolución y extensión. 
+Tome un tiempo para inspeccionar las principales características del raster, incluyendo su resolución y extensión.
 
 La función `plot()` del paquete raster crea una primera gráfica bastante decente. Sin embargo, tenga en cuenta que la escala de colores no es tan apropiada para las elevaciones: verde donde las elevaciones son altas y rojo donde son bajas. Además, estos colores predeterminados no serían tan buenos si nuestra audiencia no pudiese ver el color rojo-verde.
 
@@ -220,7 +216,6 @@ head(dat_grid)
 
 Ahora podemos incluir el raster en nuestro mapa utilizando la función `geom_tile()`
 
-
 ```{r}
 #| code-fold: true
 #| warning: false
@@ -235,7 +230,6 @@ ggplot() +
 ```
 
 Podemos mejorar el mapa anterior cambiando el azul por gris
-
 
 ```{r }
 #| code-fold: true
@@ -266,14 +260,11 @@ plot (terreno)
 
 ```
 
-
-
 # Extracción de datos de objetos raster y vector
 
 En esta sección aprenderemos a extraer valores de un raster utilizando otros objetos espaciales
 
 ## Extraer datos de un raster basados en un sf
-
 
 ```{r}
 #| code-fold: true
@@ -299,22 +290,20 @@ summary(dat_mamm)
 
 **Ejercicio**
 
-
 Genere un histograma mostrando la distribución de la pendiente y la rugosidad para los registros de cada especie.
-
 
 # Mapas interactivos
 
-El paquete mapview ofrece visualizaciones rapidas de objetos sf y raster de forma interactiva.
+El paquete mapview ofrece visualizaciones rápidas de objetos sf y raster de forma interactiva.
 
 ```{r}
 #| code-fold: true
 #| warning: false
 library(mapview)
-mapview(st_as_sf(danta_oso_sf[c("scientificName")])
+
+mapview(danta_oso_sf[c("scientificName")])
 
 ```
-
 
 # Conclusión
 
@@ -330,8 +319,6 @@ Si busca un problema en la web, como "ggplot remove legend", normalmente obtendr
 
 Si la respuesta aún no existe en línea, regístrese en Stack Overflow y pregúntela usted mismo (pero primer dedique tiempo suficiente en buscar ... ¡nadie quiere ser etiquetado por duplicar una pregunta existente!).
 
-Otra buena idea es buscar un grupo de apoyo local. El uso de R es una experiencia emocional, la curva de aprendizaje al comienzo es bien empinada, la frustración es común, pero luego de un tiempo la alegría de encontrar una solución puede ayudarnos a persistir. Tener a otras personas para ayudar, o simplemente escuchar sus frustraciones es una gran motivación para seguir aprendiendo R.  
-
+Otra buena idea es buscar un grupo de apoyo local. El uso de R es una experiencia emocional, la curva de aprendizaje al comienzo es bien empinada, la frustración es común, pero luego de un tiempo la alegría de encontrar una solución puede ayudarnos a persistir. Tener a otras personas para ayudar, o simplemente escuchar sus frustraciones es una gran motivación para seguir aprendiendo R.
 
 ![](https://media.giphy.com/media/6heBQSjt2IoA8/giphy.gif)
-

@@ -135,9 +135,9 @@ head(sp1_coords)
 Nuestra tabla de registros tiene información específica sobre las localidades de una sola especie. Con el fin de entender como combinar tablas descargaremos los datos de otra especie. En este caso el Oso Andino (*Tremarctos ornatus*).
 
 ![Oso andino](https://www.animalspot.net/wp-content/uploads/2015/12/Baby-Spectacled-Bear.jpg)
-  
+
 > Tenga en cuenta que se requiere conexión a internet y que podemos estar descargando muchos datos desde GBIF, así que este paso puede tardar unos segundos...
-  
+
 ```{r eval=TRUE, echo=TRUE, include=FALSE}
 #| code-fold: true
 #| 
@@ -147,7 +147,6 @@ gbif_data_sp2 <- occ_data(scientificName = species2, hasCoordinate = TRUE, limit
 # save to table
 dat_sp2 <- gbif_data_sp2$data
 ```
-
 
 El paquete `dplyr` proporciona un conjunto útil de funciones para unir tablas que tienen columnas en común. Escriba `?full_join` en su consola y obtendrá una lista de todos los tipos de unión que admite `dplyr`.
 
@@ -206,7 +205,8 @@ dat_oso_danta_filtrado <- dat_oso_danta %>%
   filter(scientificName %in% c("Tremarctos ornatus (F.G.Cuvier, 1825)", "Tapirus pinchaque (Roulin, 1829)")) %>%
   filter(decimalLatitude <= 20 & decimalLatitude >= -20)
 ```
-En este caso, el operador %in% verifica cuáles elementos de la columna scientificName corresponden a las dos especies evaluadas. 
+
+En este caso, el operador %in% verifica cuáles elementos de la columna scientificName corresponden a las dos especies evaluadas.
 
 Veamos como queda
 
@@ -341,10 +341,9 @@ e1<-p3 +
 e1
 ```
 
-
 ## Citacion adecuada de los datos
 
-Tenga en cuenta que es una buena practica citar correctamente los datos que se descargan de GBIF. 
+Tenga en cuenta que es una buena practica citar correctamente los datos que se descargan de GBIF.
 
 ```{r ,eval=FALSE}
 #| code-fold: true
@@ -356,7 +355,6 @@ gbif_citation(gbif_data_sp2) # para la el oso
 
 # nota: si necesita o prefiere solo un DOI para todo el conjunto de datos, descargue el conjunto de datos directamente desde www.gbif.org y luego importe el .csv a R. ¡Es muy importante citar correctamente las fuentes de datos! GBIF no es una fuente, sólo un depósito para muchas personas que trabajaron muy duro para recopilar estos datos y ponerlos a disposición.
 ```
-
 
 ¡Hemos llegado al final de la mañana! Los conceptos aprendidos el día de hoy serán fundamentales para sacar el mayor provecho en la tarde. Es hora de Almorzar :)
 
