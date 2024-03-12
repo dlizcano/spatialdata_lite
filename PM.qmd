@@ -3,7 +3,7 @@ title: "PM"
 author: 
   - name: Diego J. Lizcano
     orcid: https://orcid.org/0000-0002-9648-0576
-  - name: Andres Felipe Suárez-Castro
+  - name: Andrés Felipe Suárez-Castro
     orcid: https://orcid.org/0000-0002-6621-3821
 date: "`r Sys.Date()`"
 html_document:
@@ -30,6 +30,7 @@ library(mapview)
 library(ggplot2)
 library(sf)
 ```
+El paquete sf se utiliza para trabajar con datos espaciales y ofrece funciones para leer, escribir y analizar datos espaciales (features en inglés) de una manera sencilla y eficiente. 
 
 También utilizaremos el paquete maps para cargar un mapa global. Existen otros paquetes que también funcionan para este propósito, como el paquete *rnaturalearth*, el cual proporciona un mapa de países de todo el mundo.
 
@@ -112,7 +113,7 @@ ggplot() +
   geom_point(data = dat_oso_danta_filtrado, aes(x = decimalLongitude, y = decimalLatitude))
 ```
 
-Note que hemos utilizado `ggplot()` sin algún argumento dentro de los corchetes. Esto se debe a que trazamos varias capas, cada una con una fuente de datos diferente, por lo que debemos especificar los datos proporcionados a cada geom por separado (data = world1 para `geom_sf()` y data = dat para `geom_point`).
+Note que hemos utilizado `ggplot()` sin algún argumento dentro de los corchetes. Esto se debe a que trazamos varias capas, cada una con una fuente de datos diferente, por lo que debemos especificar los datos proporcionados a cada geom por separado (data = world1 para `geom_sf()` y data = dat para `geom_point()`).
 
 Este mapa se ve bien, pero no es necesario que representemos al mundo entero aquí. Por lo tanto, podemos modificar nuestro mapa estableciendo límites en las coordenadas. Además, podemos cambiar los colores de nuestros objetos.
 
@@ -126,7 +127,7 @@ range(dat_oso_danta_filtrado$decimalLongitude)
 range(dat_oso_danta_filtrado$decimalLatitude)
 ```
 
-Estos son los valores que utilizaremos de guía para definir la extensión de nuestro mapa mediante el uso de `coord_sf()`. Note que vamos a añadir o los argumentos *xlim* y *ylim* que definen el limite de nuestro mapa
+Estos son los valores que utilizaremos de guía para definir la extensión de nuestro mapa mediante el uso de `coord_sf()`. Note que vamos a añadir los argumentos *xlim* y *ylim* que definen el limite de nuestro mapa
 
 El nuevo mapa con la extensión corregida luce de la siguiente manera: 
 
@@ -161,7 +162,7 @@ ggplot() +
   theme_bw()
 ```
 
-Hasta aca hemos aprendido un vistazo general sobre las caracteristicas vectoriales (puntos, lineas, poligonos) de los mapas. Sin embargo gran parte de los mapas tienen otro tipo de informacion que no es vectorial. 
+Hasta acá hemos aprendido un vistazo general sobre las caracteristicas vectoriales (puntos, lineas, poligonos) de los mapas. Sin embargo, gran parte de los mapas tienen otro tipo de informacion que no es vectorial. 
 
 ## Objetos Raster
 
@@ -253,7 +254,7 @@ ggplot() +
 
 ## Rasters derivados
 
-La función terrain nos permite obtener mapas de la pendiente, el aspecto y la rugosidad los cuales usaremos mas adelante.
+La función terrain nos permite obtener mapas de la pendiente, el aspecto y la rugosidad, los cuales usaremos mas adelante.
 
 ```{r}
 #| code-fold: true
@@ -294,7 +295,7 @@ dat_mamm<-cbind(covariables, danta_oso_sf$scientificName)
 summary(dat_mamm)
 ```
 
-## graficas adicionales
+## Gráficas adicionales
 
 **Ejercicio**
 
@@ -310,7 +311,7 @@ El paquete mapview ofrece visualizaciones rapidas de objetos sf y raster de form
 #| code-fold: true
 #| warning: false
 library(mapview)
-mapview(danta_oso_sf, zcol="scientificName")
+mapview(st_as_sf(danta_oso_sf[c("scientificName")])
 
 ```
 
