@@ -9,6 +9,7 @@ website:
   site-url: "https://dlizcano.github.io/spatialdata_lite"
   repo-url: "https://github.com/dlizcano/spatialdata_lite"
   navbar:
+    search: true
     right:
       - href: index.qmd
         text: Home
@@ -17,7 +18,8 @@ website:
       - href: PM.qmd
         text: PM
       - href: about.qmd
-      - text: about
+      - icon: twitter
+        href: https://twitter.com/dlizcano
       - icon: github
         href: https://github.com/dlizcano/spatialdata_lite
         aria-label: GitHub
@@ -25,7 +27,7 @@ website:
 format:
   html:
     theme: 
-      light: Flatly
+      light: flatly
       dark: darkly
     css: styles.css
     toc: true

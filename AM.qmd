@@ -15,9 +15,9 @@ google-scholar: true
 html_document:
     toc: true
     toc_float: true
-    number_sections: true
+    number_sections: true  
     theme: united
-    highlight: tango
+    highlight: github
     code-tools: true
     code-fold: true
 ---
