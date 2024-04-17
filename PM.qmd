@@ -1,11 +1,17 @@
 ---
 title: "PM"
+description: | 
+  Introducción al procesamiento, visualización y análisis de datos espaciales en R. Parte 2. 
 author: 
   - name: Diego J. Lizcano
     orcid: https://orcid.org/0000-0002-9648-0576
   - name: Andrés Felipe Suárez-Castro
     orcid: https://orcid.org/0000-0002-6621-3821
-date: "`r Sys.Date()`"
+date: 04/12/2024
+citation: 
+  url: https://dlizcano.github.io/spatialdata_lite/
+  title: "Introducción al procesamiento, visualización y análisis de datos espaciales en R"
+google-scholar: true
 html_document:
     toc: true
     toc_float: true
@@ -17,7 +23,8 @@ html_document:
 ---
 
 # Tarde del Día 1
-
+ 
+ 
 ## Creación de un mapa básico en R
 
 Comenzamos cargando tres paquetes básicos necesarios para generar nuestros primeros mapas; `mapview`, `sf` y `ggplot2`.
@@ -70,7 +77,7 @@ plot(world1)
 
 ```
 
-Ahora podemos generar un plot utilizando el paquete ggplot y los conceptos aprendidos durante el día anterior.
+Ahora podemos generar un plot utilizando el paquete ggplot y los conceptos aprendidos durante la sesión anterior.
 
 En este caso, debemos utilizar `geom_sf()` con el fin de llamar nuestro objeto `sf`
 
@@ -98,7 +105,7 @@ Para añadir los puntos en nuestro mapa, utilizaremos la función `geom_point()`
 #| eval: true
 #| warning: false
 #| 
-dat_oso_danta_filtrado <- readRDS("C:/Users/silvi/Documents/GitHub/spatialdata_lite/data/dat_oso_danta_filtrado")
+dat_oso_danta_filtrado <- readRDS("C:/CodigoR/intro_R_espacial_lite/data/dat_oso_danta_filtrado")
 ```
 
 ```{r}

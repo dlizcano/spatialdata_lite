@@ -2,18 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://twitter.com/dlizcano/AM.html</loc>
-    <lastmod>2024-03-12T16:40:07.742Z</lastmod>
+    <lastmod>2024-04-16T15:34:28.349Z</lastmod>
   </url>
   <url>
     <loc>https://twitter.com/dlizcano/PM.html</loc>
-    <lastmod>2024-03-12T19:04:10.660Z</lastmod>
+    <lastmod>2024-04-16T15:34:26.403Z</lastmod>
   </url>
   <url>
     <loc>https://twitter.com/dlizcano/index.html</loc>
-    <lastmod>2024-03-12T16:35:25.676Z</lastmod>
+    <lastmod>2024-04-16T16:09:40.534Z</lastmod>
   </url>
   <url>
     <loc>https://twitter.com/dlizcano/about.html</loc>
-    <lastmod>2024-03-12T18:57:26.447Z</lastmod>
+    <lastmod>2024-04-16T15:29:58.632Z</lastmod>
+  </url>
+  <url>
+    <loc>https://dlizcano.github.io/spatialdata_lite/index.html</loc>
+    <lastmod>2024-04-16T16:28:08.961Z</lastmod>
+  </url>
+  <url>
+    <loc>https://dlizcano.github.io/spatialdata_lite/AM.html</loc>
+    <lastmod>2024-04-16T19:52:52.144Z</lastmod>
+  </url>
+  <url>
+    <loc>https://dlizcano.github.io/spatialdata_lite/about.html</loc>
+    <lastmod>2024-04-16T16:31:30.051Z</lastmod>
+  </url>
+  <url>
+    <loc>https://dlizcano.github.io/spatialdata_lite/PM.html</loc>
+    <lastmod>2024-04-16T19:36:22.397Z</lastmod>
   </url>
 </urlset>

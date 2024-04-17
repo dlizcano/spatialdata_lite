@@ -6,6 +6,9 @@ website:
   title: "Introducción al procesamiento, visualización y análisis de datos espaciales en R"
   subtitle: "Un mini curso"
   author: "Diego J. Lizcano & Andres Felipe Suárez-Castro"
+  citation: 
+    url: https://dlizcano.github.io/spatialdata_lite/
+  google-scholar: true
   page-navigation: true
   navbar:
     right:
@@ -37,11 +40,11 @@ Este es un curso de un día para el V Congreso Colombiano de mastozoología.\
 
 ### Día 1 en la mañana
 
-Introducción al análisis de datos en R. Tipos de objetos en R. Visualización para comprobar errores y patrones en los datos (ggplot) Preparación de tablas para la generación de análisis espaciales (dplyr – tidyr)
+Introducción al análisis de datos en R. Tipos de objetos en R. Visualización para comprobar errores y patrones en los datos (ggplot) Preparación de tablas para la generación de análisis espaciales (dplyr – tidyr). Vea la pestaña AM.
 
 ### Día 1 en la tarde
 
-Importación y visualización de datos espaciales (ps, sf, raster, rgdal). Generación de mapas (raster, ggmap, leaflet)
+Importación y visualización de datos espaciales (ps, sf, raster, rgdal). Generación de mapas (raster, ggmap, leaflet). Vea la pestaña PM. 
 
 ### Datos
 

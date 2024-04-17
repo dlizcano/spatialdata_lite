@@ -1,1 +1,1 @@
-Sitemap: https://twitter.com/dlizcano/sitemap.xml
+Sitemap: https://dlizcano.github.io/spatialdata_lite/sitemap.xml

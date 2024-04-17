@@ -6,7 +6,8 @@ website:
   twitter-card: 
     creator: "@dlizcano"
     site: "https://github.com/dlizcano/spatialdata_lite"
-  site-url: https://twitter.com/dlizcano
+  site-url: "https://dlizcano.github.io/spatialdata_lite"
+  repo-url: "https://github.com/dlizcano/spatialdata_lite"
   navbar:
     right:
       - href: index.qmd

@@ -1,11 +1,17 @@
 ---
 title: "AM"
+description: | 
+  Introducción al procesamiento, visualización y análisis de datos espaciales en R. Parte 1. 
 author: 
   - name: Diego J. Lizcano
     orcid: https://orcid.org/0000-0002-9648-0576
   - name: Andres Felipe Suárez-Castro
     orcid: https://orcid.org/0000-0002-6621-3821
-date: "`r Sys.Date()`"
+date: 04/12/2024
+citation: 
+  url: https://dlizcano.github.io/spatialdata_lite/
+  title: "Introducción al procesamiento, visualización y análisis de datos espaciales en R"
+google-scholar: true
 html_document:
     toc: true
     toc_float: true
@@ -86,16 +92,16 @@ Primero, verificaremos el tipo de datos de cada una de las variables en nuestra 
 head(dat_sp1) # ver los primeros seis registros de la tabla
 tail(dat_sp1) # ver los últimos seis registros de la tabla
 # ver los datos de la tabla
-View(dat_sp1)#ver toda la tabla
-names(dat_sp1)# nombres de la columnas
-nrow(dat_sp1)# número de filas de la tabla
-ncol(dat_sp1)#número de columnas de la tabla
-length(unique(dat_sp1$stateProvince))#número de categorías únicas de la columna "stateProvince"
-unique(dat_sp1$stateProvince) #categorías únicas de la columna "stateProvince"
-length(unique(dat_sp1$year))#número de categorías únicas de la columna "stateProvince"
-unique(dat_sp1$year)#años únicos de los registros
-table(dat_sp1$publishingCountry)#número de registros por país
-summary(dat_sp1)# resumen de la información disponible en la tabla
+View(dat_sp1) # ver toda la tabla
+names(dat_sp1) # nombres de la columnas
+nrow(dat_sp1) # número de filas de la tabla
+ncol(dat_sp1) # número de columnas de la tabla
+length(unique(dat_sp1$stateProvince)) # número de categorías únicas de la columna "stateProvince"
+unique(dat_sp1$stateProvince) # categorías únicas de la columna "stateProvince"
+length(unique(dat_sp1$year)) # número de categorías únicas de la columna "stateProvince"
+unique(dat_sp1$year) # años únicos de los registros
+table(dat_sp1$publishingCountry) # número de registros por país
+summary(dat_sp1) # resumen de la información disponible en la tabla
 ```
 
 ## Ordenamiento de datos
@@ -120,7 +126,7 @@ dat_nevados <- dplyr::filter(dat_sp1, stateProvince == c("Risaralda", "Quindío"
 head(dat_nevados)
 ```
 
-También es posible que deseemos seleccionar algunas columnas de nuestro conjunto de datos. Podemos hacer esto fácilmente con las herramientas de indexación de dataframes de R. En nuestro caso selecionaremos las columnas que son de nuestro interes.
+También es posible que deseemos seleccionar solamente algunas columnas de nuestro conjunto de datos. Podemos hacer esto fácilmente con las herramientas de indexación de dataframes de R. En nuestro caso selecionaremos las columnas que son de nuestro interes.
 
 ```{r, eval=FALSE}
 #| code-fold: true
@@ -138,7 +144,7 @@ Nuestra tabla de registros tiene información específica sobre las localidades 
 
 > Tenga en cuenta que se requiere conexión a internet y que podemos estar descargando muchos datos desde GBIF, así que este paso puede tardar unos segundos...
 
-```{r eval=TRUE, echo=TRUE, include=FALSE}
+```{r eval=TRUE, echo=TRUE, include=TRUE}
 #| code-fold: true
 #| 
 species2 <- c("Tremarctos ornatus")
@@ -161,14 +167,14 @@ dat_oso_danta  <- full_join(x = dat_sp2, y = dat_sp1)
 
 ## Visualización de datos
 
-A menudo, es más fácil explorar datos mediante el uso de gráficos. R tiene buenos paquetes base para realizar gráficos. Hoy usaremos el paquete `ggplot2`.
+A menudo, es más fácil explorar datos mediante el uso de gráficos. R tiene buenos paquetes para realizar gráficos y visualizar datos. Hoy usaremos el paquete `ggplot2`.
 
 ```{r}
 #| code-fold: true
 library(ggplot2)
 ```
 
-Primero, podemos generar un histograma para revisar la distribución de los registos por año. Por ahora no nos preocuparemos demasiado por la estética de la gráfica.
+Primero, vamos a generar un histograma para revisar la distribución de los registos por año. Por ahora no nos preocuparemos demasiado por la estética de la gráfica.
 
 ```{r, warning=FALSE}
 #| code-fold: true
@@ -197,7 +203,7 @@ ggplot(dat_oso_danta) +
   geom_point()
 ```
 
-Vamos a filtrar las dos especies de interes
+Vamos a filtrar las dos especies de interes con la función `filter()`
 
 ```{r}
 #| code-fold: true
@@ -206,7 +212,7 @@ dat_oso_danta_filtrado <- dat_oso_danta %>%
   filter(decimalLatitude <= 20 & decimalLatitude >= -20)
 ```
 
-En este caso, el operador %in% verifica cuáles elementos de la columna scientificName corresponden a las dos especies evaluadas.
+En este caso, el operador %in% verifica cuáles elementos de la columna scientificName corresponden a las dos especies evaluadas. Es decir sirve para filtrar usando un vector. Observe que primero filtramos por las especies y luego por las coordenadas. Para ejecutar varios pasos como los anteriores, uno despues del otro podemos usar la función pipe `%>%`, la cual permite utilizar el resultado de un paso como el primer argumento del siguiente.
 
 Veamos como queda
 
@@ -239,11 +245,12 @@ dat_elev_sum <-
               mean_elev = mean(elevation, na.rm=T),
               sd_elev = sd(elevation, na.rm=T),
               n = n())
+
 dat_elev_sum
 
 ```
 
-Para ejecutar varios pasos como los anteriores, podemos usar la función `%>%`, la cual permite utilizar el resultado de una función como el primer argumento del siguiente. Por ejemplo, estas líneas de código hacen lo mismo:
+Recuerde que para ejecutar varios pasos, podemos usar la función `%>%`, la cual permite utilizar el resultado de una función como el primer argumento del siguiente. Por ejemplo, estas líneas de código hacen lo mismo:
 
 ```{r, results='hide'}
 #| code-fold: true
@@ -252,9 +259,9 @@ group_by(dat_oso_danta_filtrado, stateProvince)
 dat_oso_danta_filtrado %>% group_by(., stateProvince)
 ```
 
-Las función `%>%` es útil para encadenar operaciones de varios pasos en tablas. Para la mayoría de las funciones compatibles con `%>%`, el. ni siquiera es necesario, lo que hace que nuestro código sea aún más fácil de leer.
+Las función `%>%` es muy útil para encadenar operaciones de varios pasos en tablas, lo que hace que nuestro código sea aún más fácil de entender y leer.
 
-Aquí calculamos la desviación estándar y media de la elevación para cada departamento, así como el número de filas (registros) n () para cada departamento:
+Aquí calculamos la desviación estándar y media de la elevación para cada departamento, así como el número de filas (registros) n () para cada departamento, pero antes hemos agrupado por especie.
 
 ```{r, warning=FALSE}
 #| code-fold: true
